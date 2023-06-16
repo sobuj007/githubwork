@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:githubwork/utility/sharedPref/SharedPrefManager.dart';
 import 'package:githubwork/view/dashboard/singelview.dart';
 
@@ -28,7 +29,7 @@ class _DashboardState extends State<Dashboard> {
   var _items = 0;
   var _isLoading = false;
 
-//   refresh list  data
+//  ************* refresh list  data *****************************************
   void _fetchData() async {
     setState(() {
       _isLoading = true;
@@ -44,10 +45,10 @@ class _DashboardState extends State<Dashboard> {
       } else {
         _items = _items + 10;
       }
-      print(_items);
     });
   }
 
+//  ************* Search Product area *****************************************
   searchProduct(String str) {
     var strisEiext = str.length > 0 ? true : false;
     if (strisEiext) {
@@ -56,7 +57,6 @@ class _DashboardState extends State<Dashboard> {
         String name = unfilddata[i]['name'].toUpperCase();
         if (name.contains(str.toUpperCase())) {
           filterdata.add(unfilddata[i]);
-          print(unfilddata);
         }
       }
       setState(() {
@@ -82,11 +82,39 @@ class _DashboardState extends State<Dashboard> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: const Image(image: AssetImage('assets/logo.png')),
+        leading:  Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Image(image: AssetImage('assets/logo.png')),
+        ),
         title: Text(
           'My Github/${widget.repo}',
           style: font.h4semibold(col.white),
         ),
+        actions: [
+          PopupMenuButton(
+             onSelected: (value) {
+    // your logic
+    print(value);
+  },
+            itemBuilder: (_){
+            
+         return  [
+      PopupMenuItem(
+        child: Text("Hello"),
+        value: '/hello',
+      ),
+      PopupMenuItem(
+        child: Text("About"),
+        value: '/about',
+      ),
+      PopupMenuItem(
+        child: Text("Logout"),
+        value: '3',
+      )
+    ];
+  
+          })
+        ],
       ),
       body: SafeArea(
           child: Padding(
@@ -115,10 +143,13 @@ class _DashboardState extends State<Dashboard> {
             SizedBox(
               height: 2.h,
             ),
+            //  ************* Repo list Ui *****************************************
             Flexible(
                 child: searchs
                     ? _items == null
                         ? Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Center(
                                 child: CircularProgressIndicator(),
@@ -134,6 +165,7 @@ class _DashboardState extends State<Dashboard> {
                             itemBuilder: (context, index) {
                               return GestureDetector(
                                 onTap: () {
+                                  //  ************* Navigating to Singel details page *****************************************
                                   Navigator.push(
                                       context,
                                       CupertinoPageRoute(
@@ -167,15 +199,31 @@ class _DashboardState extends State<Dashboard> {
                                         data[index]['name'],
                                         style: font.h4semibold(col.black),
                                       ),
-                                      subtitle: Padding(
-                                        padding:
-                                            EdgeInsets.symmetric(vertical: 1.h),
-                                        child: Text(
-                                          data[index]['visibility'],
-                                          style: font.h7semibold(col.black),
+                                      subtitle: Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Padding(
+                                            padding:
+                                                EdgeInsets.symmetric(vertical: 1.h),
+                                            child: Text(
+                                              data[index]['visibility'],
+                                              style: font.h7semibold(col.black),
+                                            ),
+                                          ), 
+                                          RatingBarIndicator(
+                                        rating: double.parse(
+                                            data[index]['stargazers_count']),
+                                        itemBuilder: (context, index) => Icon(
+                                          Icons.star,
+                                          color: Colors.amber,
                                         ),
+                                        itemCount: 5,
+                                        itemSize: 50.0,
+                                        direction: Axis.vertical,
                                       ),
-                                      trailing: Text(index.toString()),
+                                        ],
+                                      ),
+                                     
                                     ),
                                   ),
                                 ),
@@ -190,6 +238,7 @@ class _DashboardState extends State<Dashboard> {
                         itemBuilder: (context, index) {
                           return GestureDetector(
                             onTap: () {
+                              //  ************* Navigating to Singel details page *****************************************
                               Navigator.push(
                                   context,
                                   CupertinoPageRoute(
@@ -222,15 +271,31 @@ class _DashboardState extends State<Dashboard> {
                                     data[index]['name'],
                                     style: font.h4semibold(col.black),
                                   ),
-                                  subtitle: Padding(
-                                    padding:
-                                        EdgeInsets.symmetric(vertical: 1.h),
-                                    child: Text(
-                                      data[index]['visibility'],
-                                      style: font.h7semibold(col.black),
+                                  subtitle: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Padding(
+                                        padding:
+                                            EdgeInsets.symmetric(vertical: 1.h),
+                                        child: Text(
+                                          data[index]['visibility'],
+                                          style: font.h7semibold(col.black),
+                                        ),
+                                      ),
+                                      RatingBarIndicator(
+                                    rating: double.parse(
+                                        data[index]['stargazers_count'].toString()),
+                                    itemBuilder: (context, index) => Icon(
+                                      Icons.star,
+                                      color: Colors.amber,
                                     ),
+                                    itemCount: 5,
+                                    itemSize: 11.0,
+                                    direction: Axis.horizontal,
                                   ),
-                                  trailing: Text(index.toString()),
+                                    ],
+                                  ),
+                                  
                                 ),
                               ),
                             ),
@@ -243,6 +308,7 @@ class _DashboardState extends State<Dashboard> {
     );
   }
 
+//  ************* featch data online @ offline *****************************************
   featchRepo() async {
     var mySavedRepo = await SharedPrefManager.getMyRepo();
     var res;
@@ -255,9 +321,6 @@ class _DashboardState extends State<Dashboard> {
       res = mySavedRepo;
       jsonResponse = json.decode(res);
     }
-
- 
-
     setState(() {
       data = jsonResponse;
       unfilddata = data;

@@ -15,6 +15,13 @@ class _SingelViewState extends State<SingelView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar:  AppBar(
+        //leading: const Image(image: AssetImage('assets/logo.png')),
+        title: Text(
+          'My Github/${widget.data['name']}',
+          style: font.h4semibold(col.white),
+        ),
+      ),
       body: SafeArea(
           child: Padding(
         padding: sheet.layoutPad(),
@@ -62,7 +69,7 @@ class _SingelViewState extends State<SingelView> {
                         )
                       ],
                     ),
-                    //Image(image: NetworkImage(widget.data['owner']['avatar_url'])),
+                    
                   ],
                 ),
               ),
