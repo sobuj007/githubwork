@@ -24,5 +24,5 @@ class  StyleSheet{
 
 
 
-   layoutPad()=>EdgeInsets.symmetric(horizontal: 2.w,vertical: 3.w);            
+   layoutPad()=>EdgeInsets.symmetric(horizontal: 2.h,vertical: 4.w);            
 }

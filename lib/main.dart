@@ -32,14 +32,18 @@ updateData(name) async {
 }
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  WidgetsFlutterBinding.ensureInitialized(); var userName ;
+if(await SharedPrefManager.getUser()!=null){
+  userName = json.decode(await SharedPrefManager.getUser());refreshTimer(userName['login']);
+}
+    
 
-  var userName = json.decode(await SharedPrefManager.getUser());
+  
 
-  refreshTimer(userName['login']);
-  print(await SharedPrefManager.isUserLogin());
-  print(await SharedPrefManager.getUser());
-  print(await SharedPrefManager.getMyRepo());
+
+  // print(await SharedPrefManager.isUserLogin());
+  // print(await SharedPrefManager.getUser());
+  // print(await SharedPrefManager.getMyRepo());
   runApp(MyApp( ));
 }
 

@@ -20,11 +20,12 @@ class _SplashState extends State<Splash> {
 
   startTimer()async{
 var isUserLogin= await SharedPrefManager.isUserLogin();
-var userData=json.decode(await SharedPrefManager.getUser()) ;
-var userName=userData['login'].toString();
 
 
    if(isUserLogin ==true){
+    var userData=json.decode(await SharedPrefManager.getUser()) ;
+var userName=userData['login'].toString();
+
      Future.delayed(const Duration(seconds: 2)).then((value) => {
       Navigator.push(context, CupertinoPageRoute(builder: (_)=> Dashboard(repo: userName,)))
    });

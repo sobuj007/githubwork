@@ -1,7 +1,9 @@
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:githubwork/utility/sharedPref/SharedPrefManager.dart';
+import 'package:githubwork/view/dashboard/singelview.dart';
 
 import 'package:http/http.dart' as http;
 import 'package:githubwork/main.dart';
@@ -82,39 +84,44 @@ class _DashboardState extends State<Dashboard> {
                       onFetchData: _fetchData,
                       separatorBuilder: (context, index) => const Divider(),
                       itemBuilder: (context, index) {
-                        return Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Container(
-                            height: 12.h,
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(5),
-                                color: col.white,
-                                boxShadow: const [
-                                  BoxShadow(
-                                    color: Color(0xffDDDDDD),
-                                    blurRadius: 6.0,
-                                    spreadRadius: 2.0,
-                                    offset: Offset(0.0, 0.0),
-                                  )
-                                ]),
-                            child: ListTile(
-                              leading: Image(
-                                image: const AssetImage('assets/logo.png'),
-                                width: 14.w,
-                              ),
-                              title: Text(
-                                data[index]['name'],
-                                style: font.h4semibold(col.black),
-                              ),
-                              subtitle: Padding(
-                                padding: EdgeInsets.symmetric(vertical: 1.h),
-                                child: Text(
-                                  data[index]['visibility'],
-                                  style: font.h7semibold(col.black),
+                        return GestureDetector(
+                          onTap: (){
+                            Navigator.push(context, CupertinoPageRoute(builder: (_)=>SingelView(data: data[index],)));
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Container(
+                              height: 12.h,
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(5),
+                                  color: col.white,
+                                  boxShadow: const [
+                                    BoxShadow(
+                                      color: Color(0xffDDDDDD),
+                                      blurRadius: 6.0,
+                                      spreadRadius: 2.0,
+                                      offset: Offset(0.0, 0.0),
+                                    )
+                                  ]),
+                              child: ListTile(
+                                leading: Image(
+                                  image: const AssetImage('assets/logo.png'),
+                                  width: 14.w,
                                 ),
+                                title: Text(
+                                  data[index]['name'],
+                                  style: font.h4semibold(col.black),
+                                ),
+                                subtitle: Padding(
+                                  padding: EdgeInsets.symmetric(vertical: 1.h),
+                                  child: Text(
+                                    data[index]['visibility'],
+                                    style: font.h7semibold(col.black),
+                                  ),
+                                ),
+                                trailing: Text(index.toString()),
                               ),
-                              trailing: Text(index.toString()),
                             ),
                           ),
                         );
@@ -131,15 +138,17 @@ class _DashboardState extends State<Dashboard> {
     var mySavedRepo = await SharedPrefManager.getMyRepo();
 
     var res;
-
+ var jsonResponse ;
     if (mySavedRepo == null) {
       res = await http.get(Uri.parse(Api().getRepoInfo(widget.repo)));
       await SharedPrefManager.setMyRepo(res.body);
+      jsonResponse = json.decode(res.body);
     } else {
       res = mySavedRepo;
+      jsonResponse = json.decode(res);
     }
 
-    var jsonResponse = json.decode(res);
+   
 
     print(jsonResponse.length);
 
