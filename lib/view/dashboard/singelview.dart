@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:githubwork/main.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
@@ -27,29 +28,37 @@ class _SingelViewState extends State<SingelView> {
                   children: [
                     Row(
                       children: [
-                        CircleAvatar(
-                          radius: 35,
-                          backgroundImage:
-                              NetworkImage(widget.data['owner']['avatar_url']),
+                        CircleAvatar(radius:35 ,
+                         backgroundImage: NetworkImage(widget.data['owner']['avatar_url'])
+                             
                         ),
                         SizedBox(width: 3.w,),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              widget.data['name'],
-                              style: font.h3bold(col.black),
-                            ),
-                            Text(
-                              widget.data['owner']['login'].toString(),
-                              style: font.h5semibold(col.black),
-                            ),
-                            Text(
-                              widget.data
-                              ['pushed_at'].toString(),
-                              style: font.h7semibold(col.black),
-                            ),
-                          ],
+                        Container(
+                          width: 60.w,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                widget.data['name'],
+                                style: font.h4bold(col.black),
+                                
+                                maxLines: 2,softWrap: false,overflow: TextOverflow.ellipsis,
+                              )
+                             ,
+                              Padding(
+                                padding: EdgeInsets.symmetric(vertical: 1.w),
+                                child: Text(
+                                  widget.data['owner']['login'].toString(),
+                                  style: font.h5semibold(col.black),
+                                ),
+                              ),
+                              Text(
+                                DateTime.tryParse( widget.data
+                                ['pushed_at']).toString(),
+                                style: font.h7semibold(col.black),
+                              ),
+                            ],
+                          ),
                         )
                       ],
                     ),
