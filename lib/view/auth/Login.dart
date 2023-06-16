@@ -87,10 +87,9 @@ class _LoginState extends State<Login> {
     showLoader();
     var res =
         await http.get(Uri.parse(Api().getuserInfo(userName.text.toString())));
-
     var jsonResponse = json.decode(res.body);
-
-    if (res.statusCode == 200) {
+    try{
+if (res.statusCode == 200) {
       await SharedPrefManager.setUserLogin(true);
       await SharedPrefManager.setUser(json.encode(jsonResponse));
       Navigator.pop(context);
@@ -103,6 +102,9 @@ class _LoginState extends State<Login> {
     } else {
       ScaffoldMessenger.of(context)
           .showSnackBar(const SnackBar(content: Text("Somting Worng")));
+    }
+    }catch(e){
+print(e);
     }
   }
 
