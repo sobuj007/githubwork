@@ -28,6 +28,7 @@ class _DashboardState extends State<Dashboard> {
   bool searchs = false;
   var _items = 0;
   var _isLoading = false;
+  bool isSort=false;
 
 //  ************* refresh list  data *****************************************
   void _fetchData() async {
@@ -82,7 +83,7 @@ class _DashboardState extends State<Dashboard> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading:  Padding(
+        leading: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Image(image: AssetImage('assets/logo.png')),
         ),
@@ -91,28 +92,19 @@ class _DashboardState extends State<Dashboard> {
           style: font.h4semibold(col.white),
         ),
         actions: [
-          PopupMenuButton(
-             onSelected: (value) {
-    // your logic
-    print(value);
-  },
-            itemBuilder: (_){
-            
-         return  [
-      PopupMenuItem(
-        child: Text("Hello"),
-        value: '/hello',
-      ),
-      PopupMenuItem(
-        child: Text("About"),
-        value: '/about',
-      ),
-      PopupMenuItem(
-        child: Text("Logout"),
-        value: '3',
-      )
-    ];
-  
+          PopupMenuButton(onSelected: (value) {
+            // your logic
+            if (value == 2) {
+              setState(() {});
+            }
+          }, itemBuilder: (_) {
+            return [
+          
+              PopupMenuItem(
+                child: Text("Logout"),
+                value: '3',
+              )
+            ];
           })
         ],
       ),
@@ -121,25 +113,39 @@ class _DashboardState extends State<Dashboard> {
         padding: sheet.layoutPad(),
         child: Column(
           children: [
-            TextField(
-                autofocus: false,
-                onChanged: (String value) {
-                  print(value);
-                  searchProduct(value);
-                },
-                decoration: InputDecoration(
-                    hintText: "Search Here !",
-                    enabled: false,
-                    labelStyle: TextStyle(fontSize: 15),
-                    suffixIcon: Icon(Icons.search),
-                    enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8)),
-                    focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8)),
-                    disabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8)),
-                    contentPadding:
-                        EdgeInsets.symmetric(horizontal: 3.h, vertical: 2.w))),
+            Row(
+              children: [
+                Container(
+                  width: 78.w,
+                  child: TextField(
+                      autofocus: false,
+                      onChanged: (String value) {
+                        print(value);
+                        searchProduct(value);
+                      },
+                      decoration: InputDecoration(
+                          hintText: "Search Here !",
+                          enabled: false,
+                          labelStyle: TextStyle(fontSize: 15),
+                          suffixIcon: Icon(Icons.search),
+                          enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8)),
+                          focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8)),
+                          disabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8)),
+                          contentPadding: EdgeInsets.symmetric(
+                              horizontal: 3.h, vertical: 2.w))),
+                ),
+                IconButton(
+                    onPressed: () {
+                      data.sort((a, b) => (b['stargazers_count'])
+                          .compareTo(a['stargazers_count']));
+                      setState(() {});
+                    },
+                    icon: Icon(Icons.sort))
+              ],
+            ),
             SizedBox(
               height: 2.h,
             ),
@@ -200,30 +206,31 @@ class _DashboardState extends State<Dashboard> {
                                         style: font.h4semibold(col.black),
                                       ),
                                       subtitle: Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
                                         children: [
                                           Padding(
-                                            padding:
-                                                EdgeInsets.symmetric(vertical: 1.h),
+                                            padding: EdgeInsets.symmetric(
+                                                vertical: 1.h),
                                             child: Text(
                                               data[index]['visibility'],
                                               style: font.h7semibold(col.black),
                                             ),
-                                          ), 
+                                          ),
                                           RatingBarIndicator(
-                                        rating: double.parse(
-                                            data[index]['stargazers_count']),
-                                        itemBuilder: (context, index) => Icon(
-                                          Icons.star,
-                                          color: Colors.amber,
-                                        ),
-                                        itemCount: 5,
-                                        itemSize: 50.0,
-                                        direction: Axis.vertical,
-                                      ),
+                                            rating: double.parse(data[index]
+                                                ['stargazers_count']),
+                                            itemBuilder: (context, index) =>
+                                                Icon(
+                                              Icons.star,
+                                              color: Colors.amber,
+                                            ),
+                                            itemCount: 5,
+                                            itemSize: 50.0,
+                                            direction: Axis.vertical,
+                                          ),
                                         ],
                                       ),
-                                     
                                     ),
                                   ),
                                 ),
@@ -272,7 +279,8 @@ class _DashboardState extends State<Dashboard> {
                                     style: font.h4semibold(col.black),
                                   ),
                                   subtitle: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       Padding(
                                         padding:
@@ -283,19 +291,19 @@ class _DashboardState extends State<Dashboard> {
                                         ),
                                       ),
                                       RatingBarIndicator(
-                                    rating: double.parse(
-                                        data[index]['stargazers_count'].toString()),
-                                    itemBuilder: (context, index) => Icon(
-                                      Icons.star,
-                                      color: Colors.amber,
-                                    ),
-                                    itemCount: 5,
-                                    itemSize: 11.0,
-                                    direction: Axis.horizontal,
-                                  ),
+                                        rating: double.parse(data[index]
+                                                ['stargazers_count']
+                                            .toString()),
+                                        itemBuilder: (context, index) => Icon(
+                                          Icons.star,
+                                          color: Colors.amber,
+                                        ),
+                                        itemCount: 5,
+                                        itemSize: 11.0,
+                                        direction: Axis.horizontal,
+                                      ),
                                     ],
                                   ),
-                                  
                                 ),
                               ),
                             ),
