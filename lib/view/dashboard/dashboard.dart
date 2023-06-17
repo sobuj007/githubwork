@@ -4,14 +4,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:githubwork/utility/sharedPref/SharedPrefManager.dart';
+import 'package:githubwork/view/auth/Login.dart';
 import 'package:githubwork/view/dashboard/singelview.dart';
-
 import 'package:http/http.dart' as http;
 import 'package:githubwork/main.dart';
-
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:very_good_infinite_list/very_good_infinite_list.dart';
-
 import '../../utility/apis.dart';
 
 class Dashboard extends StatefulWidget {
@@ -28,7 +26,7 @@ class _DashboardState extends State<Dashboard> {
   bool searchs = false;
   var _items = 0;
   var _isLoading = false;
-  bool isSort=false;
+  bool isSort = false;
 
 //  ************* refresh list  data *****************************************
   void _fetchData() async {
@@ -79,6 +77,12 @@ class _DashboardState extends State<Dashboard> {
     featchRepo();
   }
 
+  logMeout() async {
+    await SharedPrefManager.logout();
+    Navigator.pushAndRemoveUntil(
+        context, CupertinoPageRoute(builder: (_) => Login()), (route) => false);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -93,16 +97,15 @@ class _DashboardState extends State<Dashboard> {
         ),
         actions: [
           PopupMenuButton(onSelected: (value) {
-            // your logic
-            if (value == 2) {
-              setState(() {});
+            // log out ****************************************
+            if (value == '0') {
+              logMeout();
             }
           }, itemBuilder: (_) {
             return [
-          
               PopupMenuItem(
                 child: Text("Logout"),
-                value: '3',
+                value: '0',
               )
             ];
           })
@@ -115,22 +118,17 @@ class _DashboardState extends State<Dashboard> {
           children: [
             //************************* */ search area *****************************************************
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Container(
-                  width: 78.w,
+                Flexible(
+                    child: Padding(
+                  padding: const EdgeInsets.all(8.0),
                   child: TextField(
-                      autofocus: false,
                       onChanged: (String value) {
-                        print(value);
                         searchProduct(value);
                       },
                       decoration: InputDecoration(
                           hintText: "Search Here !",
-                          enabled: false,
                           labelStyle: TextStyle(fontSize: 15),
-                          suffixIcon: Icon(Icons.search),
                           enabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(8)),
                           focusedBorder: OutlineInputBorder(
@@ -139,26 +137,36 @@ class _DashboardState extends State<Dashboard> {
                               borderRadius: BorderRadius.circular(8)),
                           contentPadding: EdgeInsets.symmetric(
                               horizontal: 3.h, vertical: 2.w))),
-                ),
-                // sorting buttton *******************************************************
+                )),
+
+                //...........................
+                //.end search textfield..........
+                //..................
+
+                // ***************sorting buttton *******************************************************
                 IconButton(
                     onPressed: () {
-                      if(isSort==false){
-                      
-                       data.sort((a, b) => (b['stargazers_count'])
-                          .compareTo(a['stargazers_count']));  
-                           isSort=true;
-                      setState(() {
-                     
-                      });
-                      }else{
-                        setState(() {
-                       isSort=false;
-                          data=unfilddata;
-                        });
+                      if (isSort == false) {
+                        data.sort((a, b) => (b['stargazers_count'])
+                            .compareTo(a['stargazers_count']));
+                        isSort = true;
+                        SharedPrefManager.setSorting(true);
+                        setState(() {});
+                      } else {
+                        isSort = false;
+                        setState(() {});
+                        SharedPrefManager.setSorting(false);
+                        Navigator.pushAndRemoveUntil(
+                            context,
+                            CupertinoPageRoute(builder: (_) => Dashboard(repo: widget.repo,)),
+                            (route) => false);
                       }
                     },
-                    icon: Icon(Icons.sort,color: isSort?col.red:col.black,size: 5.h,))
+                    icon: Icon(
+                      Icons.sort,
+                      color: isSort ? col.red : col.hint,
+                      size: 5.h,
+                    ))
               ],
             ),
             SizedBox(
@@ -234,15 +242,16 @@ class _DashboardState extends State<Dashboard> {
                                           ),
                                           RatingBarIndicator(
                                             rating: double.parse(data[index]
-                                                ['stargazers_count']),
+                                                    ['stargazers_count']
+                                                .toString()),
                                             itemBuilder: (context, index) =>
                                                 Icon(
                                               Icons.star,
                                               color: Colors.amber,
                                             ),
                                             itemCount: 5,
-                                            itemSize: 50.0,
-                                            direction: Axis.vertical,
+                                            itemSize: 11.0,
+                                            direction: Axis.horizontal,
                                           ),
                                         ],
                                       ),
@@ -334,6 +343,8 @@ class _DashboardState extends State<Dashboard> {
 //  ************* featch data online @ offline *****************************************
   featchRepo() async {
     var mySavedRepo = await SharedPrefManager.getMyRepo();
+    isSort= (await SharedPrefManager.getSort())!;
+    print(isSort);
     var res;
     var jsonResponse;
     if (mySavedRepo == null) {
@@ -348,6 +359,10 @@ class _DashboardState extends State<Dashboard> {
       data = jsonResponse;
       unfilddata = data;
       _items = 0;
+      if(isSort){
+      data.sort((a, b) => (b['stargazers_count'])
+                            .compareTo(a['stargazers_count']));
+      }
     });
   }
 }

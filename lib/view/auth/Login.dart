@@ -27,6 +27,12 @@ class _LoginState extends State<Login> {
     super.initState();
   }
 
+@override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    userName.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,6 +44,7 @@ class _LoginState extends State<Login> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
+              // ******************* Logo image ********************************************
               Image(
                 image: const AssetImage('assets/logo.png'),
                 width: 35.w,
@@ -53,14 +60,17 @@ class _LoginState extends State<Login> {
               SizedBox(
                 height: 2.h,
               ),
+              // ******************* Input area ********************************************
               TextField(
                   controller: userName,
                   decoration: sheet.inputstyle('', "username")),
               SizedBox(
                 height: 2.h,
               ),
+              // ******************* Login Button********************************************
               GestureDetector(
                 onTap: () {
+                  // ******************* Featching user info ********************************************
                   getuserInfo();
                 },
                 child: Container(
@@ -82,7 +92,7 @@ class _LoginState extends State<Login> {
       )),
     );
   }
-
+// ******************* Function  ********************************************
   getuserInfo() async {
     showLoader();
     var res =
@@ -90,7 +100,8 @@ class _LoginState extends State<Login> {
     var jsonResponse = json.decode(res.body);
     try{
 if (res.statusCode == 200) {
-      await SharedPrefManager.setUserLogin(true);
+     try{
+       await SharedPrefManager.setUserLogin(true);
       await SharedPrefManager.setUser(json.encode(jsonResponse));
       Navigator.pop(context);
       Navigator.push(
@@ -99,6 +110,11 @@ if (res.statusCode == 200) {
               builder: (_) => Dashboard(
                     repo: jsonResponse['login'].toString(),
                   )));
+     }
+     catch(e){
+ScaffoldMessenger.of(context)
+          .showSnackBar(const SnackBar(content: Text("Check Your Internet")));
+     }
     } else {
       ScaffoldMessenger.of(context)
           .showSnackBar(const SnackBar(content: Text("Somting Worng")));

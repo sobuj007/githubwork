@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:githubwork/utility/apis.dart';
 import 'package:githubwork/utility/sharedPref/SharedPrefManager.dart';
 
@@ -39,12 +40,12 @@ if(await SharedPrefManager.getUser()!=null){
     
 
   
+//*************** */ setting  screen Orentation *********************************
+SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
+  .then((_) {
+runApp(MyApp());
+});
 
-
-  // print(await SharedPrefManager.isUserLogin());
-  // print(await SharedPrefManager.getUser());
-  // print(await SharedPrefManager.getMyRepo());
-  runApp(MyApp( ));
 }
 
 class MyApp extends StatelessWidget {
@@ -54,7 +55,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ResponsiveSizer(
-        builder: (context, orientaion, screenType) => const MaterialApp(
+      
+        builder: (context, orientaion, screenType) =>  MaterialApp(
               debugShowCheckedModeBanner: false,
               title: "My Github",
               home: Splash(

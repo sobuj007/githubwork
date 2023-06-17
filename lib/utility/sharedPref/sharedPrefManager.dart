@@ -7,10 +7,9 @@ import '../model/userModel.dart';
 
 
 class SharedPrefKeys{
-static final String USER = "USER";
-  
-  static const String USERINFO = "USERINFO";
+ 
   static const String ISUSERLOGIN = "ISUSERLOGIN";
+  static const String ISSORT = "ISSORT";
  
 }
 
@@ -24,6 +23,14 @@ class SharedPrefManager{
   static Future<bool?> isUserLogin()async{
     SharedPreferences pref=await SharedPreferences.getInstance();
     return pref.getBool(SharedPrefKeys.ISUSERLOGIN);
+  }
+  static Future <bool> setSorting(data)async{
+    SharedPreferences pref=await SharedPreferences.getInstance();
+    return pref.setBool("ISSORT", data);
+  }
+  static Future<bool?> getSort()async{
+    SharedPreferences pref=await SharedPreferences.getInstance();
+    return pref.getBool(SharedPrefKeys.ISSORT);
   }
 
 static setUser(String data)async{
@@ -47,7 +54,7 @@ static Future<dynamic> getMyRepo() async {
     return d;
   }
 
-Future<void> logut()async{
+ static logout()async{
 SharedPreferences pref= await  SharedPreferences.getInstance();
 pref.clear();
 
