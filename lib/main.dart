@@ -33,35 +33,29 @@ updateData(name) async {
 }
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized(); var userName ;
-if(await SharedPrefManager.getUser()!=null){
-  userName = json.decode(await SharedPrefManager.getUser());refreshTimer(userName['login']);
-}
-    
+  WidgetsFlutterBinding.ensureInitialized();
+  var userName;
+  if (await SharedPrefManager.getUser() != null) {
+    userName = json.decode(await SharedPrefManager.getUser());
+    refreshTimer(userName['login']);
+  }
 
-  
 //*************** */ setting  screen Orentation *********************************
-SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
-  .then((_) {
-runApp(MyApp());
-});
-
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
+      .then((_) {
+    runApp(MyApp());
+  });
 }
 
 class MyApp extends StatelessWidget {
-
-  MyApp({ super.key});
-
+  MyApp({super.key});
   @override
   Widget build(BuildContext context) {
     return ResponsiveSizer(
-      
-        builder: (context, orientaion, screenType) =>  MaterialApp(
+        builder: (context, orientaion, screenType) => MaterialApp(
               debugShowCheckedModeBanner: false,
               title: "My Github",
-              home: Splash(
-             
-              ),
+              home: Splash(),
             ));
   }
 }

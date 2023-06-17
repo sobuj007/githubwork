@@ -158,7 +158,10 @@ class _DashboardState extends State<Dashboard> {
                         SharedPrefManager.setSorting(false);
                         Navigator.pushAndRemoveUntil(
                             context,
-                            CupertinoPageRoute(builder: (_) => Dashboard(repo: widget.repo,)),
+                            CupertinoPageRoute(
+                                builder: (_) => Dashboard(
+                                      repo: widget.repo,
+                                    )),
                             (route) => false);
                       }
                     },
@@ -169,6 +172,9 @@ class _DashboardState extends State<Dashboard> {
                     ))
               ],
             ),
+              //...........................
+                //.end search area..........
+                //..................
             SizedBox(
               height: 2.h,
             ),
@@ -185,6 +191,7 @@ class _DashboardState extends State<Dashboard> {
                               ),
                             ],
                           )
+                          /// ********************** filter repo list ********************************
                         : InfiniteList(
                             itemCount: data.length,
                             isLoading: _isLoading,
@@ -261,6 +268,9 @@ class _DashboardState extends State<Dashboard> {
                               );
                             },
                           )
+                          
+                          
+/********************************** unfliter repo */
                     : InfiniteList(
                         itemCount: _items,
                         isLoading: _isLoading,
@@ -343,7 +353,7 @@ class _DashboardState extends State<Dashboard> {
 //  ************* featch data online @ offline *****************************************
   featchRepo() async {
     var mySavedRepo = await SharedPrefManager.getMyRepo();
-    isSort= (await SharedPrefManager.getSort())!;
+    isSort = (await SharedPrefManager.getSort())!;
     print(isSort);
     var res;
     var jsonResponse;
@@ -359,9 +369,9 @@ class _DashboardState extends State<Dashboard> {
       data = jsonResponse;
       unfilddata = data;
       _items = 0;
-      if(isSort){
-      data.sort((a, b) => (b['stargazers_count'])
-                            .compareTo(a['stargazers_count']));
+      if (isSort) {
+        data.sort(
+            (a, b) => (b['stargazers_count']).compareTo(a['stargazers_count']));
       }
     });
   }

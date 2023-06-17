@@ -12,7 +12,7 @@ import 'package:http/http.dart' as http;
 import '../../utility/apis.dart';
 
 class Login extends StatefulWidget {
-   Login({super.key});
+  Login({super.key});
 
   @override
   State<Login> createState() => _LoginState();
@@ -27,12 +27,13 @@ class _LoginState extends State<Login> {
     super.initState();
   }
 
-@override
+  @override
   void dispose() {
     // TODO: implement dispose
     super.dispose();
     userName.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -92,35 +93,35 @@ class _LoginState extends State<Login> {
       )),
     );
   }
+
 // ******************* Function  ********************************************
   getuserInfo() async {
     showLoader();
     var res =
         await http.get(Uri.parse(Api().getuserInfo(userName.text.toString())));
     var jsonResponse = json.decode(res.body);
-    try{
-if (res.statusCode == 200) {
-     try{
-       await SharedPrefManager.setUserLogin(true);
-      await SharedPrefManager.setUser(json.encode(jsonResponse));
-      Navigator.pop(context);
-      Navigator.push(
-          context,
-          CupertinoPageRoute(
-              builder: (_) => Dashboard(
-                    repo: jsonResponse['login'].toString(),
-                  )));
-     }
-     catch(e){
-ScaffoldMessenger.of(context)
-          .showSnackBar(const SnackBar(content: Text("Check Your Internet")));
-     }
-    } else {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(const SnackBar(content: Text("Somting Worng")));
-    }
-    }catch(e){
-print(e);
+    try {
+      if (res.statusCode == 200) {
+        try {
+          await SharedPrefManager.setUserLogin(true);
+          await SharedPrefManager.setUser(json.encode(jsonResponse));
+          Navigator.pop(context);
+          Navigator.push(
+              context,
+              CupertinoPageRoute(
+                  builder: (_) => Dashboard(
+                        repo: jsonResponse['login'].toString(),
+                      )));
+        } catch (e) {
+          ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text("Check Your Internet")));
+        }
+      } else {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(const SnackBar(content: Text("Somting Worng")));
+      }
+    } catch (e) {
+      print(e);
     }
   }
 

@@ -15,7 +15,7 @@ class _SingelViewState extends State<SingelView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar:  AppBar(
+      appBar: AppBar(
         //leading: const Image(image: AssetImage('assets/logo.png')),
         title: Text(
           'My Github/${widget.data['name']}',
@@ -29,17 +29,18 @@ class _SingelViewState extends State<SingelView> {
           children: [
             Card(
               child: Padding(
-                padding: EdgeInsets.all(
-                   3.w),
+                padding: EdgeInsets.all(3.w),
                 child: Column(
                   children: [
                     Row(
                       children: [
-                        CircleAvatar(radius:35 ,
-                         backgroundImage: NetworkImage(widget.data['owner']['avatar_url'])
-                             
+                        CircleAvatar(
+                            radius: 35,
+                            backgroundImage: NetworkImage(
+                                widget.data['owner']['avatar_url'])),
+                        SizedBox(
+                          width: 3.w,
                         ),
-                        SizedBox(width: 3.w,),
                         Container(
                           width: 60.w,
                           child: Column(
@@ -48,10 +49,10 @@ class _SingelViewState extends State<SingelView> {
                               Text(
                                 widget.data['name'],
                                 style: font.h4bold(col.black),
-                                
-                                maxLines: 2,softWrap: false,overflow: TextOverflow.ellipsis,
-                              )
-                             ,
+                                maxLines: 2,
+                                softWrap: false,
+                                overflow: TextOverflow.ellipsis,
+                              ),
                               Padding(
                                 padding: EdgeInsets.symmetric(vertical: 1.w),
                                 child: Text(
@@ -60,8 +61,8 @@ class _SingelViewState extends State<SingelView> {
                                 ),
                               ),
                               Text(
-                                DateTime.tryParse( widget.data
-                                ['pushed_at']).toString(),
+                                DateTime.tryParse(widget.data['pushed_at'])
+                                    .toString(),
                                 style: font.h7semibold(col.black),
                               ),
                             ],
@@ -69,7 +70,6 @@ class _SingelViewState extends State<SingelView> {
                         )
                       ],
                     ),
-                    
                   ],
                 ),
               ),
