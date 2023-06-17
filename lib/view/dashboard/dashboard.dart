@@ -113,7 +113,10 @@ class _DashboardState extends State<Dashboard> {
         padding: sheet.layoutPad(),
         child: Column(
           children: [
+            //************************* */ search area *****************************************************
             Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Container(
                   width: 78.w,
@@ -137,13 +140,25 @@ class _DashboardState extends State<Dashboard> {
                           contentPadding: EdgeInsets.symmetric(
                               horizontal: 3.h, vertical: 2.w))),
                 ),
+                // sorting buttton *******************************************************
                 IconButton(
                     onPressed: () {
-                      data.sort((a, b) => (b['stargazers_count'])
-                          .compareTo(a['stargazers_count']));
-                      setState(() {});
+                      if(isSort==false){
+                      
+                       data.sort((a, b) => (b['stargazers_count'])
+                          .compareTo(a['stargazers_count']));  
+                           isSort=true;
+                      setState(() {
+                     
+                      });
+                      }else{
+                        setState(() {
+                       isSort=false;
+                          data=unfilddata;
+                        });
+                      }
                     },
-                    icon: Icon(Icons.sort))
+                    icon: Icon(Icons.sort,color: isSort?col.red:col.black,size: 5.h,))
               ],
             ),
             SizedBox(
