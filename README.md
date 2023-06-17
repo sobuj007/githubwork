@@ -15,3 +15,8 @@ For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
 ![SPLASHSCREEN!](imageforgit/sp.jpg)
+![LOGINSCREEN!](imageforgit/log.jpg)
+![DASHBOARDSCREEN!](imageforgit/dash.jpg)
+
+![DETAILSSCREEN!](imageforgit/details.jpg)
+![LOGOUTSCREEN!](imageforgit/logout.jpg)
